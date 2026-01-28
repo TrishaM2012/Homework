@@ -13,6 +13,8 @@ class Bus(Vehicle):
         final_fare = total_price + maintenance_charge
         return final_fare
     
+    
 bus = Bus(50)
 final_bus_fare = bus.price()
+print(final_bus_fare)
       
