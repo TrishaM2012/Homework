@@ -1,0 +1,68 @@
+import pygame
+pygame.init()
+
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Two Rectangular Sprites Game")
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, color, width, height, x, y):
+        super().__init__()
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.change_x = 0
+        self.change_y = 0
+
+    def update(self):
+        self.rect.x += self.change_x
+        self.rect.y += self.change_y
+
+    def set_speed(self, x_speed, y_speed):
+        self.change_x = x_speed
+        self.change_y = y_speed
+        
+running = True
+clock = pygame.time.Clock()
+
+
+player1 = Player((255, 0, 0), 50, 50, 100, 250) 
+player2 = Player((0, 0, 255), 50, 50, 650, 250) 
+
+all_sprites_list = pygame.sprite.Group()
+all_sprites_list.add(player1)
+all_sprites_list.add(player2)
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player1.set_speed(-5, 0)
+            elif event.key == pygame.K_RIGHT:
+                player1.set_speed(5, 0)
+            elif event.key == pygame.K_UP:
+                player1.set_speed(0, -5)
+            elif event.key == pygame.K_DOWN:
+                player1.set_speed(0, 5)
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                player1.set_speed(0, player1.change_y)
+            elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                player1.set_speed(player1.change_x, 0)
+
+
+
+all_sprites_list.update()
+
+screen.fill((255, 255, 255)) 
+all_sprites_list.draw(screen)
+
+pygame.display.flip()
+clock.tick(60)
+
+pygame.quit()
